@@ -7,7 +7,7 @@ export default {
   */
   head: {
     // 1.修改title
-    title: "闲云旅游网", 
+    title: "闲云旅游网2.0", 
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },

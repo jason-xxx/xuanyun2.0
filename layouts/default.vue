@@ -1,13 +1,20 @@
 <template>
   <div>
+    <!-- 插入头部组件 也可以写成<Header>-->
+    <Header></Header>
     <!-- 内容占位组件 -->
     <nuxt />
   </div>
 </template>
 
 <script>
+//导入头部组件
+import Header from '@/components/header'
 export default {
-
+//注册组件
+components:{
+  Header
+}
 }
 </script>
 
