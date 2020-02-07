@@ -1,3 +1,4 @@
+import pkg from './package'
 
 export default {
   mode: 'universal',
@@ -5,14 +6,17 @@ export default {
   ** Headers of the page
   */
   head: {
-    title: process.env.npm_package_name || '',
+    // 1.修改title
+    title: "闲云旅游网", 
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      // 2.新增全局字体样式
+      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_1168872_ehvuah8v57g.css'} 
     ]
   },
   /*
@@ -23,7 +27,9 @@ export default {
   ** Global CSS
   */
   css: [
-    'element-ui/lib/theme-chalk/index.css'
+    'element-ui/lib/theme-chalk/index.css',
+     // 3.新增自定义的页面过渡样式（git上一步在assets文件添加的）
+    'assets/main.css'
   ],
   /*
   ** Plugins to load before mounting the App
@@ -47,8 +53,12 @@ export default {
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
-  axios: {
-  },
+ //4.添加ajax
+ axios: {
+  // See https://github.com/nuxt-community/axios-module#options
+  // baseURL: "http://157.122.54.189:9095" // 新增备用地址
+  baseURL: "http://127.0.0.1:1337" // 新增axios默认请求路径 		  
+},
   /*
   ** Build configuration
   */
