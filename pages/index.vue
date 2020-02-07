@@ -22,7 +22,11 @@
         <el-row type="flex" class="search-tab">
             <!-- 遍历数组 -->
           <span v-for="(value,index) in options" :key="index"
-          @click="handleClick(index)">
+          @click="handleClick(index)"
+          :class="{active:current===index}">
+          <!-- 以上是v-bind class绑定 active是tab高亮的样式 
+          即当current（设定索引）===index（遍历索引）时，添加此样式
+          即点击会触发current=index的事件，所有点击哪个哪个就高亮-->
             <i>{{value.name}}</i>    
           </span>
         </el-row>
