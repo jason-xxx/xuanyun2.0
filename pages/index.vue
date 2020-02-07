@@ -7,8 +7,9 @@
     <!-- 遍历数组获取图片路径 -->
       <el-carousel-item 
       v-for="(item, index) in banners" :key="index">
+      <!-- nuxt自动将axios绑定到实例所有可以直接调用$axios.defaults.baseURL -->
       <div class="banner-image"
-      :style="`background:url(${item.url}) center center no-repeat;
+      :style="`background:url(${$axios.defaults.baseURL}${item.url}) center center no-repeat;
       background-size:contain contain;`"></div>
       </el-carousel-item>
     </el-carousel>
@@ -17,20 +18,23 @@
 
 <script>
 export default {
-data(){
-  return{
-    // 轮播图数据
-    banners:[
-        {
-          url: "http://157.122.54.189:9095/assets/images/th03.jfif",
-                },
-        {
-          url: "http://157.122.54.189:9095/assets/images/th04.jfif",
+    data(){
+        return {
+            banners: [], // 轮播图数据
         }
-    ]
-        }
-}
-
+    },
+    mounted(){
+        //因为nuxt已经将axios绑定在实例中，所有可以直接this
+        //并通过api发送请求,
+        //因为在nuxt.config.js-axios{}里配置过http:127.0.0.1:1337所有这里url不用加前缀
+      this.$axios({
+        url:'/scenics/banners'
+      }).then(res=>{
+          //通过.then(res=>{ console.log(res)看res事件源对象得到data})
+          const{data}=res.data;
+          this.banners=data;
+      })
+    }
 }
 </script>
 
