@@ -1,0 +1,19 @@
+{
+  "name": "xianyun2.0",
+  "version": "1.0.0",
+  "description": "My top-notch Nuxt.js project",
+  "author": "jason",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "nuxt": "^2.0.0",
+    "element-ui": "^2.4.11",
+    "@nuxtjs/axios": "^5.3.6"
+  },
+  "devDependencies": {}
+}
