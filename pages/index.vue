@@ -80,10 +80,16 @@ export default {
       })
     },
     methods:{
-      //点击tab栏时的事件，重点在修改current索引
-      //每点击一次会得到遍历对应的索引index，然后将index赋值给current
       handleClick(index){
-          this.current=index;
+      //添加点击机票tab栏时的跳转
+       if(index===2){
+           this.$router.push({
+               path:'/air'
+           })
+       }
+      //点击tab栏时的事件，重点在修改current索引
+      //每点击一次会得到遍历对应的索引index，然后将index赋值给current   
+       this.current=index;
       }
     }
 }
