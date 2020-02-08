@@ -62,20 +62,28 @@ export default {
           //el-form自带一个validate的方法用于数据验证
           this.$refs.form.validate(valid=>{
               if(valid){
-                  //提交到登录接口
-                  this.$axios({
-                      url:'/accounts/login',
-                      method:'POST',
-                      //提交form表单的数据（data里的form所有加this）
-                      data:this.form
-                  }).then(res=>{
-                      console.log(res);
-                     //将获取的数据赋值给data
-                     const {data} =res;
-                     //通过commit调用store/user.js中mutations中的方法
-                     //然后将data（即请求回来的数据带到user.js）
-                     this.$store.commit('user/setUserInfo',data)
-                  })
+                //提交到登录接口
+                //   this.$axios({
+                //       url:'/accounts/login',
+                //       method:'POST',
+                //       //提交form表单的数据（data里的form所有加this）
+                //       data:this.form
+                //   }).then(res=>{
+                //       console.log(res);
+                //      //将获取的数据赋值给data
+                //      const {data} =res;
+                //      //通过commit调用store/user.js中mutations中的方法
+                //      //然后将data（即请求回来的数据带到user.js）
+                //      this.$store.commit('user/setUserInfo',data)
+                //   })
+                //注释掉上面的请求，将请求写到store/user.js的actions里
+                //通过commit调用user.js中dispatch中的方法
+                this.$store.dispatch('user/login',this.form).then(()=>{
+                //登录成功提示
+                this.$message.success('登录成功！！！');
+                //跳转首页
+                this.$router.push('/')
+                })
               }
           })
           
