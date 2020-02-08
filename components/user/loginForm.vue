@@ -70,6 +70,11 @@ export default {
                       data:this.form
                   }).then(res=>{
                       console.log(res);
+                     //将获取的数据赋值给data
+                     const {data} =res;
+                     //通过commit调用store/user.js中mutations中的方法
+                     //然后将data（即请求回来的数据带到user.js）
+                     this.$store.commit('user/setUserInfo',data)
                   })
               }
           })
