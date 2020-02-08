@@ -1,25 +1,27 @@
 <template>
   <el-form :model="form" ref="form" :rules="rules" class="form">
-   <!-- 用户名输入框 -->
-    <el-form-item class="form-item">
+   <!-- 用户名输入框 ----------------------------------->
+    <el-form-item class="form-item" prop="username">
         <!-- 新增v-model做双向绑定用户名-->
       <el-input placeholder="用户名/手机"
       v-model="form.username">
       </el-input>
     </el-form-item>
-   <!-- 密码输入框 -->
-    <el-form-item class="form-item">
+
+   <!-- 密码输入框 ------------------------------------->
+    <el-form-item class="form-item" prop="password">
         <!-- 新增v-model做双向绑定密码 -->
       <el-input placeholder="密码" type="password"
       v-model="form.password">
       </el-input>
     </el-form-item>
-   <!-- 忘记密码 -->
+
+   <!-- 忘记密码 --------------------------------------->
    <p class="from-text">
      <nuxt-link to="#">忘记密码</nuxt-link>
    </p>
 
-   <!-- 登录按钮 -->
+   <!-- 登录按钮 ---------------------------------------->
    <el-button class="submit" type="primary"
    @click="handleLoginSubmit">登录</el-button>
 
@@ -35,14 +37,36 @@ export default {
               username:'',//用户名
               password:''//密码
           },
-          //表单规则
-          reles:{},
+          //表单验证规则
+          rules:{
+               username: [
+                { 
+                    required: true, 
+                    message: '请输入用户名', 
+                    trigger: 'blur' 
+                },
+            ],
+            password: [
+                { 
+                    required: true, 
+                    message: '请输入密码', 
+                    trigger: 'blur' 
+                },
+            ]
+          },
       }
   },
   methods:{
       //提交登录
       handleLoginSubmit(){
-          console.log(this.form);
+          //el-form自带一个validate的方法用于数据验证
+          this.$refs.form.validate(vaild=>{
+              if(vaild){
+                  //提交到登录接口
+                  console.log(this.form)
+              }
+          })
+          
       }
   }
 }
