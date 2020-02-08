@@ -60,10 +60,17 @@ export default {
       //提交登录
       handleLoginSubmit(){
           //el-form自带一个validate的方法用于数据验证
-          this.$refs.form.validate(vaild=>{
-              if(vaild){
+          this.$refs.form.validate(valid=>{
+              if(valid){
                   //提交到登录接口
-                  console.log(this.form)
+                  this.$axios({
+                      url:'/accounts/login',
+                      method:'POST',
+                      //提交form表单的数据（data里的form所有加this）
+                      data:this.form
+                  }).then(res=>{
+                      console.log(res);
+                  })
               }
           })
           
