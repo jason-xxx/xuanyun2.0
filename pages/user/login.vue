@@ -10,6 +10,11 @@
 
 
           </el-row>
+        <!-- 登录功能组件 -->
+        <LoginForm v-if="suoyin==0"/>
+
+        <!-- 注册功能组件（暂时没写注册组件） -->
+        <!-- <RegisterForm v-if="suoyin == 1"/> -->
         </div>
 
       </el-row>
@@ -17,15 +22,21 @@
 </template>
 
 <script>
+import LoginForm from "@/components/user/loginForm"
 export default {
    data(){
      return{
+       //索引
        suoyin:0,
        name:[
-         '注册',
-         '登录'
+         '登录',
+         '注册'
        ]
      }
+   },
+   //注册组件
+   components:{
+     LoginForm
    },
    methods: {
         handleChangeTab(index){
