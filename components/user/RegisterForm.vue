@@ -142,8 +142,25 @@ export default {
           this.$refs.form.validate(valid=>{
               //表单验证全部通过
               if(valid){
-                //准备调用注册接口
-                console.log(this.form)
+              //是用结构的方法将checkPassword移除，因为axios不需要接收这个值
+              //suibian就是移除checkPassword后的对象，含义请求需要的4个值（具体看api）；
+              const{checkPassword,...suibian}=this.form;
+
+              //调用axios注册接口
+              this.$axios({
+                  url:'/accounts/register',
+                  method:'POST',
+                  //suibian就是移除checkPasword的form
+                  data:suibian
+              }).then(res=>{
+                  const{data}=res;
+                  //调用commit保存数据到user.js中state将data数据赋值给userInfo
+                  this.$store.commit('user/setUserInfo',data)
+                  //提示注册成功提示框
+                  this.$message.success('注册成功');
+                  //跳转主页
+                  this.$router.push('/')
+              })
               }
           })
       }
