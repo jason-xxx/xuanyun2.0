@@ -56,8 +56,17 @@
 <script>
 export default {
   methods:{
-      //用户退出事件
-      handleLogout(){}
+      //用户退出事件，清空store中user.js中userInfo的数据
+      handleLogout(){
+          this.$store.commit('user/setUserInfo',{
+              token:'',
+              user:{}//一定要用对象
+          })
+            this.$message({
+                message: "退出成功",
+                type: "success"
+            })
+      }
   }   
 }
 </script>
