@@ -83,6 +83,16 @@ export default {
                 callback();
             }
         };
+    //验证手机号码
+    const validateUsername=(rules,value,callback)=>{
+        if(value===''){
+            callback(new Error('请输入手机号码'))
+        }else if(/^1[3-9][0-9]{9}$/.test(value)==false){
+            callback(new Error('请输入正确的手机格式'))
+        }else{
+            callback();
+        }
+    }
     return {
         // 表单数据
       form: {
@@ -96,7 +106,7 @@ export default {
       rules: {
           username:[
            //required表示必填，message:为错误信息，trigger失焦时触发
-           {required: true,message:"请输入用户名",trigger:'blur'}
+           {validator:validateUsername,trigger:'blur'}
            ],
           captcha:[
             {required:true,message:'请输入验证码',trigger:"blur"}
