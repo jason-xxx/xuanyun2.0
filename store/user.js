@@ -33,6 +33,16 @@ export const actions={
         //调用commit保存数据到setUserInfo再传到state
         store.commit('setUserInfo',data)
       })
+  },
+  //通过sendCaptcha自定义函数发验证请求
+  sendCaptcha(store,data){
+    return this.$axios({
+      url:'captchas',
+      method:'POST',
+      data:{
+        tel:data
+      }
+    })
   }
 
 }
