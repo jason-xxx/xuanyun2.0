@@ -13,7 +13,7 @@
         <!-- 登录功能组件 -->
         <LoginForm v-if="suoyin==0"/>
 
-        <!-- 注册功能组件（暂时没写注册组件） -->
+        <!-- 注册功能组件 -->
         <RegisterForm v-if="suoyin == 1"/>
         </div>
 
@@ -28,7 +28,7 @@ export default {
    data(){
      return{
        //索引
-       suoyin:1,//改为1方便开发，当注册页面完成会改回0
+       suoyin:0,
        name:[
          '登录',
          '注册'
