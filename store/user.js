@@ -59,7 +59,7 @@ export const actions={
         tel:data
       }
     }).then(res => {
-      console.log("store中的：", res);
+      // console.log("store中的：", res);
       return res;
   })
   }

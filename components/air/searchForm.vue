@@ -103,14 +103,37 @@ methods:{
     //出发城市输入框获得焦点时触发，列表下拉出现推荐城市
     //value是选中的值，callback是回调函数，接收要展示的列表
     queryDepartSearch(value,callback){
-      console.log(value);
-      
-      // 模拟请求回来的数组
-      callback([
-          {value:'广州',sort:'CAN'},
-          {value:'广元',sort:'sui'},
-          {value:'广安',sort:'bain'}
-      ])
+     //如果输入框没有值就直接返回
+      if(!value){
+        return;
+      }
+ 
+      //如果有值，就根据value请求城市列表
+      this.$axios({
+        //通过get请求上传value，再返回res
+        url:'/airs/city',
+        //axios的get请求的参数使用params，如果是post请求使用data
+        params:{
+          //将value值传个给name，即输入框内容给的mane上传
+          name:value
+        }
+      }).then(res=>{
+        // console.log(res);
+        
+        const {data}=res.data;
+
+      //给data数组中每一项添加一个value属性（通过map遍历方法）
+      //data数组是数组包对象的形式，因为element规定必须使用value：城市名
+      //所有要给数组中每一项的对象里添加value（可以comsole.log(res)看看data结构）
+      const newData=data.map(v=>{
+        // 添加value的同时去掉“市”字，因为返回值有，但上传不需要
+        v.value=v.name.replace('市','')
+        //map返回的数组由return组成的
+        return v;
+      })
+       //callback将数组展示出来
+        callback(newData)
+        })
     },
     
     //目标城市输入块获得焦点时触发
@@ -124,9 +147,9 @@ methods:{
     },
     //点击出发城市下拉列表中的城市时触发
     handleDepartSelect(item){
-      // console.log(item);
+      console.log(item);
       //item返回是一个对象，里面有value和sort（是element-ui提供的）
-      
+      //
         this.form.departCity=item.value
         this.form.departCdeo=item.sort;
     },
@@ -144,7 +167,7 @@ methods:{
     },
     //提交表单时触发
     handleSubmit(){
-
+    console.log(this.form)
     }
     },
     mounted(){

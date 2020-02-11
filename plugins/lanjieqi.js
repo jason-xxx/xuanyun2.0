@@ -6,7 +6,7 @@ import{Message}from 'element-ui'
 //网页启动时就会执行plugins中的所有文件，包括这个lanjieqi.js
 //就会返回data参数（里面有我们需要的对象如$axios)
 export default (data)=>{
-    console.log(data);
+    // console.log(data);
 
     //拦截错误请求
     data.$axios.onError(err=>{
