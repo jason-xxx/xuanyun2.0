@@ -15,11 +15,11 @@
     <!-- 出发框城市----------- -->
     <el-form-item label='出发城市'>
         <!-- fetch-suggestions 监听输入框的输入，可以在这事件请求api(输入“广”字提示广州等..) -->
-        <!-- select点击选中建议时触发 -->
+        <!-- select点击选中建议时触发，即点击出发城市下拉列表中的城市时触发 -->
         <el-autocomplete
         class="el-autocomplete"
         placeholder="请输入出发城市"
-        v-model="form"
+        v-model="form.departCity"
         :fetch-suggestions="queryDepartSearch"
         @select="handleDepartSelect"
         ></el-autocomplete>
@@ -86,6 +86,13 @@ data(){
            {icon:"iconfont iconshuangxiang",
             name:'往返'}
         ],
+        form:{
+          departCity:'',
+          departCdeo:'',
+          destCity:'',
+          destCode:'',
+          departDate:''
+        }
     }
 },
 methods:{
@@ -93,13 +100,16 @@ methods:{
     handleSearchTab(item,index){
          this.suoyin=index
     },
-    //出发城市输入框获得焦点时触发
+    //出发城市输入框获得焦点时触发，列表下拉出现推荐城市
     //value是选中的值，callback是回调函数，接收要展示的列表
-    queryDepartSearch(value,callbck){
+    queryDepartSearch(value,callback){
+      console.log(value);
+      
+      // 模拟请求回来的数组
       callback([
-          {value:1},
-          {value:2},
-          {value:3}
+          {value:'广州',sort:'CAN'},
+          {value:'广元',sort:'sui'},
+          {value:'广安',sort:'bain'}
       ])
     },
     
@@ -112,9 +122,13 @@ methods:{
             {value:3}
         ])
     },
-    //出发城市下拉选择时触发
+    //点击出发城市下拉列表中的城市时触发
     handleDepartSelect(item){
-
+      // console.log(item);
+      //item返回是一个对象，里面有value和sort（是element-ui提供的）
+      
+        this.form.departCity=item.value
+        this.form.departCdeo=item.sort;
     },
     //目标城市下拉选择时触发
     handleDestSelect(item){
