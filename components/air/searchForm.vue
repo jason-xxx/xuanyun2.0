@@ -223,7 +223,27 @@ methods:{
     },
     //提交表单时触发
     handleSubmit(){
-    console.log(this.form)
+      if(!this.form.departCity){
+        this.$message.error('请输入出发城市')
+        return;
+      }
+
+      if(!this.form.destCity){
+        this.$message.error('请输入到达的城市')
+        return;
+      }
+      
+      if(!this.form.departDate){
+        this.$message.error('请选择时间')
+        return;
+      }
+
+      //跳转到air/flights，保证该页面url的有5个参数
+      this.$router.push({
+        path:'/air/flights',
+        //query是url的的参数
+        query:this.form
+      })
     }
     },
     mounted(){
