@@ -219,7 +219,12 @@ methods:{
     },
     //触发和目标城市切换时触发
     handleReverse(){
+      const {departCity,departCdeo,destCity,destCode}=this.form;
+      this.form.departCity=destCity;
+      this.form.departCdeo=destCode;
 
+      this.form.destCity=departCity;
+      this.form.destCode=departCdeo;
     },
     //提交表单时触发
     handleSubmit(){
