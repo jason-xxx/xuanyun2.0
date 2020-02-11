@@ -16,12 +16,14 @@
     <el-form-item label='出发城市'>
         <!-- fetch-suggestions 监听输入框的输入，可以在这事件请求api(输入“广”字提示广州等..) -->
         <!-- select点击选中建议时触发，即点击出发城市下拉列表中的城市时触发 -->
+        <!-- @blur:失去焦点时触发，默认中第一个城市 （handleDepartBlur这个文档没有，因为需求自己添加的）-->
         <el-autocomplete
         class="el-autocomplete"
         placeholder="请输入出发城市"
         v-model="form.departCity"
         :fetch-suggestions="queryDepartSearch"
         @select="handleDepartSelect"
+        @blur="handleDepartBlur"
         ></el-autocomplete>
         </el-form-item>
 
@@ -92,7 +94,10 @@ data(){
           destCity:'',
           destCode:'',
           departDate:''
-        }
+        },
+        //出发城市列表,方便handleDepartBlur获得newData，
+        //因为与queryDepartSearch同一级不能用this方法,所有先存到data（），再使用this调用
+        departData:[]
     }
 },
 methods:{
@@ -100,6 +105,7 @@ methods:{
     handleSearchTab(item,index){
          this.suoyin=index
     },
+
     //出发城市输入框获得焦点时触发，列表下拉出现推荐城市
     //value是选中的值，callback是回调函数，接收要展示的列表
     queryDepartSearch(value,callback){
@@ -131,11 +137,25 @@ methods:{
         //map返回的数组由return组成的
         return v;
       })
+
+       //把newData保存到data中(方便handleDepartBlur调用)
+       this.departData=newData;
+
        //callback将数组展示出来
         callback(newData)
         })
     },
-    
+    //输入完整出发城市失焦时触发（自己添加的需求，人人都是产品经理）
+    handleDepartBlur(){
+      if(this.departData.length===0){
+        return;
+      }
+
+      //若输入完整城市名就默认获取数组第一个城市
+      this.form.departCity=this.departData[0].value;
+      this.form.departCdeo=this.departData[0].sort;
+    } ,
+
     //目标城市输入块获得焦点时触发
     //value是选中的值，callback是回调函数，接收要展示的列表
     queryDestSearch(value,callback){
