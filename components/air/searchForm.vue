@@ -32,8 +32,10 @@
       <el-autocomplete
       class="el-autocomplete"
       placeholder="到达城市"
+      v-model="form.destCity"
       :fetch-suggestions="queryDestSearch"
       @select="handleDestSelect"
+      @blur="handleDestBlur"
       ></el-autocomplete>
     </el-form-item>
 
@@ -97,7 +99,10 @@ data(){
         },
         //出发城市列表,方便handleDepartBlur获得newData，
         //因为与queryDepartSearch同一级不能用this方法,所有先存到data（），再使用this调用
-        departData:[]
+        departData:[],
+
+         // 到达城市列表,与出发城市同理
+        destData: []
     }
 },
 methods:{
@@ -159,15 +164,38 @@ methods:{
     //目标城市输入块获得焦点时触发
     //value是选中的值，callback是回调函数，接收要展示的列表
     queryDestSearch(value,callback){
-        callback([
-            {value:1},
-            {value:2},
-            {value:3}
-        ])
+       if(!value){
+                return;
+            }
+            // 根据value请求城市列表
+            this.$axios({
+                url: "/airs/city",
+                params: {
+                    name: value
+                }
+            }).then(res => {
+                const {data} = res.data;
+                const newData = data.map(v => {
+                    v.value = v.name.replace("市", "");
+                    return v;
+                })
+                // 把newData保存到data中(出了这里和出发城市不一样，函数内的其他代码和出发城市都是一样的)
+                this.destData = newData;
+                callback(newData);
+            })
     },
+    // 到达城市输入框失去焦点时候触发
+        handleDestBlur(){
+            if(this.destData.length === 0){
+                return;
+            }
+            // 默认获取数组中第一个城市
+            this.form.destCity =  this.destData[0].value;
+            this.form.destCode =  this.destData[0].sort;
+        },
     //点击出发城市下拉列表中的城市时触发
     handleDepartSelect(item){
-      console.log(item);
+      // console.log(item);
       //item返回是一个对象，里面有value和sort（是element-ui提供的）
       //
         this.form.departCity=item.value
@@ -175,7 +203,9 @@ methods:{
     },
     //目标城市下拉选择时触发
     handleDestSelect(item){
-
+      // console.log(item);
+      this.form.destCity = item.value;
+      this.form.destCode = item.sort;
     },
     //确认选择日期时触发
     handleDate(value){
