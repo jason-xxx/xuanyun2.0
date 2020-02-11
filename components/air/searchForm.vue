@@ -43,6 +43,7 @@
     <el-form-item label="出发时间">
         <!-- change用户确认选择日期时触发 -->
         <el-date-picker type="date"
+        v-model="form.departDate"
         placeholder="请选择时间"
         style="width:100%"
         @change='handleDate'>
@@ -77,6 +78,9 @@
 </template>
 
 <script>
+//引入时间格式转换工具
+import moment from 'moment';
+
 export default {
 data(){
     return{
@@ -209,6 +213,8 @@ methods:{
     },
     //确认选择日期时触发
     handleDate(value){
+      //修改时间的格式
+      this.form.departDate=moment(value).format('YYYY-MM-DD')
 
     },
     //触发和目标城市切换时触发
