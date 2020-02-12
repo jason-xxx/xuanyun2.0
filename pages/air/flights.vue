@@ -13,7 +13,9 @@
                 <FlightsListHead/>
 
                 <!-- 航班信息 -->
-                <FlightsItem/>
+                <FlightsItem
+                v-for="(item,index) in flightsData"
+                :key="index"/>
             </div>
 
             <!-- 侧边栏 -->
@@ -31,12 +33,24 @@ import FlightsItem from "@/components/air/flightsItem"
 export default {
     data(){
         return {
-            
+          //是机票的总数据（含info，flight，total，options这些属性）
+            flightsData:{}
         }
     },
     components: {
         FlightsListHead,
         FlightsItem
+    },
+    mounted(){
+      this.$axios({
+        url:'/airs',
+        //从http地址上拿那个五个参数:城市x2、城市代码x2、时间
+        params:this.$route.query
+      }).then(res=>{
+        // 将返回数据赋值给flightsDdta
+        this.flightsData=res.data;
+        
+      })
     }
 }
 </script>
