@@ -14,8 +14,9 @@
 
                 <!-- 航班信息 -->
                 <FlightsItem
-                v-for="(item,index) in flightsData"
-                :key="index"/>
+                v-for="(item,index) in flightsData.flights"
+                :key="index"
+                :data="item"/>
             </div>
 
             <!-- 侧边栏 -->
