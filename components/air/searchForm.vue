@@ -46,7 +46,9 @@
         v-model="form.departDate"
         placeholder="请选择时间"
         style="width:100%"
-        @change='handleDate'>
+        @change='handleDate'
+        :picker-options="pickerOptions">
+        
         </el-date-picker>
     </el-form-item>
 
@@ -106,7 +108,15 @@ data(){
         departData:[],
 
          // 到达城市列表,与出发城市同理
-        destData: []
+        destData: [],
+        
+        //日期可选设置（机票今日前的时间不可选）
+            pickerOptions: {
+            // 如果返回true表示可选
+            disabledDate(time) {
+                return time.getTime() + 3600 * 1000 * 24 < Date.now();
+            },
+        }
     }
 },
 methods:{
