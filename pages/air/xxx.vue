@@ -6,33 +6,33 @@
             <div class="flights-content">
                 <!-- 过滤条件 -->
                 <div>
-
+                    
                 </div>
-
+                
                 <!-- 航班头部布局 -->
                 <FlightsListHead/>
-
+                
                 <!-- 航班信息 -->
                 <FlightsItem
-                v-for="(item,index) in dataList"
-                :key="index"
-                :data="item"/>
+                 v-for="(item, index) in dataList"
+                 :key="index"
+                 :data="item"/>
 
-            <!-- 分页组件 -->
-            <!-- size-change: 切换条数时候触发的事件
-            current-change: 切换页面时候触发的事件
-            current-page: 当前的页数
-            page-size: 当前的条数
-            total: 总条数 -->
-            <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="pageIndex"
-            :page-sizes="[5, 10, 15, 20]"
-            :page-size="pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total">
-            </el-pagination>
+                <!-- 分页组件 -->
+                <!-- size-change: 切换条数时候触发的事件
+                current-change: 切换页面时候触发的事件
+                current-page: 当前的页数
+                page-size: 当前的条数
+                total: 总条数 -->
+                <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="pageIndex"
+                    :page-sizes="[5, 10, 15, 20]"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="total">
+                    </el-pagination>
             </div>
 
             <!-- 侧边栏 -->
@@ -50,16 +50,17 @@ import FlightsItem from "@/components/air/flightsItem"
 export default {
     data(){
         return {
-          //是机票的总数据（含info，flight，total，options这些属性）
-            flightsData:{},
-            //当前页面
-            pageIndex:1,
-            //当前的条数
-            pageSize:5,
-            //总条数
-            total:0
+            // 机票总数据 （有info, flights, total, options这些属性）
+            flightsData: {},
+            // 当前页数
+            pageIndex: 1,
+            // 当前的条数
+            pageSize: 5,
+            // 总条数
+            total: 0
         }
-    },computed: {
+    },
+    computed: {
         // 切割之后返回的数组（当前页面要展示的数组）
         // 计算属性函数内部引用实例（this）的属性一旦发生了变化，函数会重新执行返回新的值
         dataList(){
@@ -74,34 +75,33 @@ export default {
                 this.pageIndex * this.pageSize
             );
             return arr;
-        }	        
-        },
+        }
+    },
     components: {
         FlightsListHead,
         FlightsItem
     },
     mounted(){
-      this.$axios({
-        url:'/airs',
-        //从http地址上拿那个五个参数:城市x2、城市代码x2、时间
-        params:this.$route.query
-      }).then(res=>{
-        // 将返回数据赋值给flightsDdta
-        this.flightsData=res.data;
-         // 修改总条数
-        this.total = this.flightsData.total;
-        
-      })
-    }, 
+        // 请求机票列表数据
+        this.$axios({
+            url: "/airs",
+            params: this.$route.query
+        }).then(res => {
+            // 总数据
+            this.flightsData = res.data;
+            // 修改总条数
+            this.total = this.flightsData.total;
+        })
+    },
     methods: {
-     // 切换条数时候触发的事件
-     handleSizeChange(index){
-         this.pageSize = index;
-     },
-     // 切换页数时候触发的事件
-     handleCurrentChange(index){
-         this.pageIndex = index;
-     },
+        // 切换条数时候触发的事件
+        handleSizeChange(index){
+            this.pageSize = index;
+        },
+        // 切换页数时候触发的事件
+        handleCurrentChange(index){
+            this.pageIndex = index;
+        },
     }
 }
 </script>
