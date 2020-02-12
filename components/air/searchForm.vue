@@ -115,44 +115,78 @@ methods:{
          this.suoyin=index
     },
 
+//封装出发城市和到达城市的请求函数
+querySearch(value){
+  //根据value请求城市列表
+  return this.$axios({
+    url:'/airs/city',
+    //axios的get请求的参数使用params，post-data
+    params:{
+      name:value
+    }
+  }).then(res=>{
+    const {data}=res.data;
+    const newData=data.map(v=>{
+      v.value=v.name.replace('市','');
+      return v;
+    })
+    return newData;
+  })
+},
     //出发城市输入框获得焦点时触发，列表下拉出现推荐城市
     //value是选中的值，callback是回调函数，接收要展示的列表
     queryDepartSearch(value,callback){
      //如果输入框没有值就直接返回
       if(!value){
+        //修复bug1,如果value是空，就把原来的城市列表清空
+        this.departData=[];
+        // 2.修复bug2,callback[]空数组，就不会出现下拉空白加载中的bug了
+        callback([]);
         return;
       }
- 
-      //如果有值，就根据value请求城市列表
-      this.$axios({
-        //通过get请求上传value，再返回res
-        url:'/airs/city',
-        //axios的get请求的参数使用params，如果是post请求使用data
-        params:{
-          //将value值传个给name，即输入框内容给的mane上传
-          name:value
-        }
-      }).then(res=>{
-        // console.log(res);
-        
-        const {data}=res.data;
-
-      //给data数组中每一项添加一个value属性（通过map遍历方法）
-      //data数组是数组包对象的形式，因为element规定必须使用value：城市名
-      //所有要给数组中每一项的对象里添加value（可以comsole.log(res)看看data结构）
-      const newData=data.map(v=>{
-        // 添加value的同时去掉“市”字，因为返回值有，但上传不需要
-        v.value=v.name.replace('市','')
-        //map返回的数组由return组成的
-        return v;
-      })
-
-       //把newData保存到data中(方便handleDepartBlur调用)
-       this.departData=newData;
-
-       //callback将数组展示出来
+       
+      // 调用封装好的querySearch函数
+      this.querySearch(value).then(newData=>{
+        //把newData保存到data中
+        this.departData=newData;
+        //callback数组，数组每一项必须是对象，对象必须有value（具体参考未封装前代码）
         callback(newData)
-        })
+      })
+       
+
+ //封装前---------------------------------------------开始
+      //如果有值，就根据value请求城市列表
+      // this.$axios({
+      //   //通过get请求上传value，再返回res
+      //   url:'/airs/city',
+      //   //axios的get请求的参数使用params，如果是post请求使用data
+      //   params:{
+      //     //将value值传个给name，即输入框内容给的mane上传
+      //     name:value
+      //   }
+      // }).then(res=>{
+      //   // console.log(res);
+        
+      //   const {data}=res.data;
+
+      // //给data数组中每一项添加一个value属性（通过map遍历方法）
+      // //data数组是数组包对象的形式，因为element规定必须使用value：城市名
+      // //所有要给数组中每一项的对象里添加value（可以comsole.log(res)看看data结构）
+      // const newData=data.map(v=>{
+      //   // 添加value的同时去掉“市”字，因为返回值有，但上传不需要
+      //   v.value=v.name.replace('市','')
+      //   //map返回的数组由return组成的
+      //   return v;
+      // })
+
+      //  //把newData保存到data中(方便handleDepartBlur调用)
+      //  this.departData=newData;
+
+      //  //callback将数组展示出来
+      //   callback(newData)
+      //   })
+ //封装前---------------------------------------------结束
+
     },
     //输入完整出发城市失焦时触发（自己添加的需求，人人都是产品经理）
     handleDepartBlur(){
@@ -169,24 +203,36 @@ methods:{
     //value是选中的值，callback是回调函数，接收要展示的列表
     queryDestSearch(value,callback){
        if(!value){
-                return;
+        //修复bug1,如果value是空，就把原来的城市列表清空
+        this.destData=[];
+        // 2.修复bug2,callback[]空数组，就不会出现下拉空白加载中的bug了
+        callback([]);
+        return;
             }
-            // 根据value请求城市列表
-            this.$axios({
-                url: "/airs/city",
-                params: {
-                    name: value
-                }
-            }).then(res => {
-                const {data} = res.data;
-                const newData = data.map(v => {
-                    v.value = v.name.replace("市", "");
-                    return v;
-                })
-                // 把newData保存到data中(出了这里和出发城市不一样，函数内的其他代码和出发城市都是一样的)
-                this.destData = newData;
-                callback(newData);
+            // 调用封装好的querySearch函数
+            this.querySearch(value).then(newData=>{
+              this.departData=newData;
+              callback(newData)
             })
+
+            // 封装前-----------------------------------------开始
+            // // 根据value请求城市列表
+            // this.$axios({
+            //     url: "/airs/city",
+            //     params: {
+            //         name: value
+            //     }
+            // }).then(res => {
+            //     const {data} = res.data;
+            //     const newData = data.map(v => {
+            //         v.value = v.name.replace("市", "");
+            //         return v;
+            //     })
+            //     // 把newData保存到data中(出了这里和出发城市不一样，函数内的其他代码和出发城市都是一样的)
+            //     this.destData = newData;
+            //     callback(newData);
+            // })
+            //封装前-------------------------------------------结束
     },
     // 到达城市输入框失去焦点时候触发
         handleDestBlur(){
