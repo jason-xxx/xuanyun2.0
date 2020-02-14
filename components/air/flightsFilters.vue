@@ -112,7 +112,6 @@ export default {
               //如果return的值是true（）,说明复合条件
               return v.airline_name===value
           })  
-          console.log(newData);
           //子传父，通过getData把数据改变成过滤后的数据
           this.$emit('getData',newData)
         },

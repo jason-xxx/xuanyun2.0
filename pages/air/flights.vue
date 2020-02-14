@@ -5,7 +5,7 @@
             <!-- 顶部过滤列表 -->
             <div class="flights-content">
                 <!-- 过滤条件 -->
-               <FlightsFilters :data='flightsData' @getData='getData'/>
+               <FlightsFilters :data='cacheFlightsData' @getData='getData'/>
 
                 <!-- 航班头部布局 -->
                 <FlightsListHead/>
@@ -54,6 +54,11 @@ export default {
                 info: {},
                 options: {},
             },
+            //数据备份，
+            cacheFlightsData:{
+                info:{},
+                options:{}
+            },
             //当前页面
             pageIndex:1,
             //当前的条数
@@ -91,11 +96,12 @@ export default {
       }).then(res=>{
         // 将返回数据赋值给flightsDdta
         this.flightsData=res.data;
-         // 修改总条数
-        this.total = this.flightsData.total;
-        console.log(this.flightsData);
+         //备份数据，使用{...}方法展开对象，从而得到新的对象才不与上面的flightsData冲突
+         //每次备份都会从新在这里拿数据
+         this.cacheFlightsData={...res.data}
         
-        
+        //修改总条数
+        this.total = this.flightsData.total;             
       })
     }, 
     methods: {
@@ -111,7 +117,7 @@ export default {
      //获取过滤组件的过滤后的数组（arr就是过滤后的数组newData）
      getData(arr){
         //  这样就将原来的数据更改为过滤的数据了
-        // （因为改了数据，点击其他航空公司时就没了，存在bug，稍后修改）
+        // （因为改了数据，点击其他航空公司时就没了，存在bug，稍后修复）
          this.flightsData.flights=arr;
          //数据变少，页码也需要变少
          this.total=arr.length;
