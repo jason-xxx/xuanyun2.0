@@ -30,7 +30,7 @@
                     v-for="(item,index) in data.options.flightTimes"
                     :key="index"
                     :label="`${item.from}:00-${item.to}:00`"
-                    value="1">
+                    :value="`${item.from},${item.to}`">
                     </el-option>
                 </el-select>
             </el-col>
@@ -94,13 +94,27 @@ export default {
         }
     },
     methods: {
-        // 选择机场时候触发
+        // 选择出发机场时候触发
         handleAirport(value){
+         //从所有出发机场里找到符合value的
+         const newData=this.data.flights.filter(v=>{
+             //如果return的值为true，说明符合条件
+             return v.org_airport_name===value;
+         })
+         this.$emit('getData',newData)
             
         },
         // 选择出发时间时候触发
         handleFlightTimes(value){
-            
+            const arr=value.split(',');
+
+            const newData=this.data.flights.filter(v=>{
+            //出发时间小时
+            const hours=Number(v.dep_time.split(':')[0]);
+            //如果return的值为true，说明符合条件（出发的小时是否在选中范围内）
+            return Number(arr[0]<=hours&& hours<Number(arr[1]))
+            })
+            this.$emit('getData',newData)
         },
          // 选择航空公司时候触发
         handleCompany(value){
@@ -117,6 +131,12 @@ export default {
         },
          // 选择机型时候触发
         handleAirSize(value){
+          //从所有航班里面找到条件符合value的(filter是循环的一种方法)。。。
+          const newData=this.data.flights.filter(v=>{
+              //如果return为true，说明复合条件
+              return v.plane_size===value;
+          })
+          this.$emit('getData',newData)
            
         },
         
