@@ -5,8 +5,8 @@
             <!-- 顶部过滤列表 -->
             <div class="flights-content">
                 <!-- 过滤条件 -->
-               <FlightsFilters/>
-               
+               <FlightsFilters :data='flightsData'/>
+
                 <!-- 航班头部布局 -->
                 <FlightsListHead/>
 
@@ -50,7 +50,10 @@ export default {
     data(){
         return {
           //是机票的总数据（含info，flight，total，options这些属性）
-            flightsData:{},
+            flightsData:{
+                info: {},
+                options: {},
+            },
             //当前页面
             pageIndex:1,
             //当前的条数
@@ -90,6 +93,8 @@ export default {
         this.flightsData=res.data;
          // 修改总条数
         this.total = this.flightsData.total;
+        console.log(this.flightsData);
+        
         
       })
     }, 
