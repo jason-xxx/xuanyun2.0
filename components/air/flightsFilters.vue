@@ -96,7 +96,6 @@ export default {
     methods: {
         // 选择机场时候触发
         handleAirport(value){
-            console.log(value);
             
         },
         // 选择出发时间时候触发
@@ -105,7 +104,17 @@ export default {
         },
          // 选择航空公司时候触发
         handleCompany(value){
-            
+          // 从所有航班里面找到条件符合value的(filter是循环的一种方法)
+          //例如点击东航，从多的数组中找到与东航相关的数组
+          //过滤类似关键字匹配数组，value（展开中的其中一项）就是关键字
+          //newData就是通过过滤出来的数组
+          const newData=this.data.flights.filter(v=>{
+              //如果return的值是true（）,说明复合条件
+              return v.airline_name===value
+          })  
+          console.log(newData);
+          //子传父，通过getData把数据改变成过滤后的数据
+          this.$emit('getData',newData)
         },
          // 选择机型时候触发
         handleAirSize(value){

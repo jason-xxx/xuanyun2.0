@@ -5,7 +5,7 @@
             <!-- 顶部过滤列表 -->
             <div class="flights-content">
                 <!-- 过滤条件 -->
-               <FlightsFilters :data='flightsData'/>
+               <FlightsFilters :data='flightsData' @getData='getData'/>
 
                 <!-- 航班头部布局 -->
                 <FlightsListHead/>
@@ -107,6 +107,15 @@ export default {
      handleCurrentChange(index){
          this.pageIndex = index;
      },
+
+     //获取过滤组件的过滤后的数组（arr就是过滤后的数组newData）
+     getData(arr){
+        //  这样就将原来的数据更改为过滤的数据了
+        // （因为改了数据，点击其他航空公司时就没了，存在bug，稍后修改）
+         this.flightsData.flights=arr;
+         //数据变少，页码也需要变少
+         this.total=arr.length;
+     }
     }
 }
 </script>
