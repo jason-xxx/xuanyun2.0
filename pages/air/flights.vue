@@ -52,11 +52,13 @@ export default {
           //是机票的总数据（含info，flight，total，options这些属性）
             flightsData:{
                 info: {},
+                flights: [],
                 options: {},
             },
             //数据备份，
             cacheFlightsData:{
                 info:{},
+                flights: [],
                 options:{}
             },
             //当前页面
