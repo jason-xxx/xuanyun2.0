@@ -3,10 +3,14 @@
         <div class="air-column">
             <h2>乘机人</h2>
             <el-form class="member-info">
-                <div class="member-info-item" >
+                <div class="member-info-item" 
+                v-for="(item,index) in form.users"
+                :key=index>
 
                     <el-form-item label="乘机人类型">
-                        <el-input placeholder="姓名" class="input-with-select">
+                        <el-input placeholder="姓名" 
+                        class="input-with-select"
+                        v-model="item.username">
                             <el-select 
                             slot="prepend" 
                             value="1" 
@@ -18,7 +22,9 @@
 
                     <el-form-item label="证件类型">
                         <el-input 
-                        placeholder="证件号码"  class="input-with-select">
+                        placeholder="证件号码"  
+                        class="input-with-select"
+                        v-model="item.id">
                             <el-select 
                             slot="prepend" 
                             value="1"           
@@ -75,10 +81,34 @@
 
 <script>
 export default {
+    data(){
+        return{
+           form:{
+                //乘机人的列表（使用数组是可添加多个乘机人）
+            users:[
+                {
+                    username:"",//名字
+                    id:""//身份证
+                }
+            ],
+            insurances:[],//保险id(保险需后台获取)
+            contactName:'',//联系人名字
+            contactPhone:'',//联系人电话
+            invoice:false,//因为此案例不需要发票，直接false
+            seat_xid:this.$route.query.seat_xid,//直接在http里拿，因为上面有挂载
+            ari:this.$route.query.id//同理，直接在http里拿，因为上面有挂载
+           }
+
+        }
+    },
     methods: {
         // 添加乘机人
         handleAddUsers(){
-            
+        //点击添加乘机人时，push一个数组进去
+        this.form.users.push({
+                    username:"",//名字
+                    id:""//身份证
+        })           
         },
         
         // 移除乘机人
@@ -91,6 +121,7 @@ export default {
         },
         // 提交订单
         handleSubmit(){
+            console.log(this.form.users);
             
         }
     }
