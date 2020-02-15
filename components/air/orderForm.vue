@@ -34,7 +34,7 @@
                         </el-input>
                     </el-form-item>
 
-                    <span class="delete-user" @click="handleDeleteUser()">-</span>
+                    <span class="delete-user" @click="handleDeleteUser(index)">-</span>
                 </div>
             </el-form>
 
@@ -112,7 +112,9 @@ export default {
         },
         
         // 移除乘机人
-        handleDeleteUser(){
+        handleDeleteUser(index){
+        // 使用splice方法删数组(index：表示删哪一项，1：表示删多少个)
+            this.form.users.splice(index,1)
         },
         
         // 发送手机验证码
