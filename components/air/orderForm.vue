@@ -5,7 +5,7 @@
             <el-form class="member-info">
                 <div class="member-info-item" 
                 v-for="(item,index) in form.users"
-                :key=index>
+                :key="index">
 
                     <el-form-item label="乘机人类型">
                         <el-input placeholder="姓名" 
@@ -44,9 +44,12 @@
         <div class="air-column">
             <h2>保险</h2>
             <div>
-                <div class="insurance-item">
+                <!-- 循环渲染保险数据 -->
+                <div class="insurance-item" 
+                v-for="(item, index) in infoData.insurances"
+                :key="index">
                     <el-checkbox 
-                    label="航空意外险：￥30/份×1  最高赔付260万" 
+                    :label="`${item.type}：￥${item.price}/份×1  最高赔付${item.compensation}`"  
                     border>
                     </el-checkbox> 
                 </div>
@@ -96,10 +99,28 @@ export default {
             contactPhone:'',//联系人电话
             invoice:false,//因为此案例不需要发票，直接false
             seat_xid:this.$route.query.seat_xid,//直接在http里拿，因为上面有挂载
-            ari:this.$route.query.id//同理，直接在http里拿，因为上面有挂载
-           }
-
+            air:this.$route.query.id//同理，直接在http里拿，因为上面有挂载
+           },
+          //当前的机票详情信息,已关联到axios的数据
+          infoData:{}
         }
+    },
+    mounted(){
+        //请求机票详情信息（里面包含保险和右侧栏需要的信息）
+        const {id, seat_xid} = this.$route.query;//需要结构
+        this.$axios({
+            //因为api给到的url是'/airs/:id'是带 : 的，所有要以下面的形式写
+          url: "/airs/" + id,
+          //get请求用params，post用data
+          params:{
+              seat_xid
+          }
+        }).then(res=>{
+            //赋值给infoData（当前的机票详情信息）
+           this.infoData=res.data
+           console.log(res.data);
+           
+        })
     },
     methods: {
         // 添加乘机人
@@ -123,7 +144,6 @@ export default {
         },
         // 提交订单
         handleSubmit(){
-            console.log(this.form.users);
             
         }
     }

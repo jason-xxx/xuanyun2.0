@@ -107,7 +107,7 @@ export default {
             //后台需要：航班id，座位id
             this.$router.push({
                 path:'/air/order',
-                quer:{
+                query:{
                     id:this.data.id,
                     seat_xid:item.seat_xid
                 }
