@@ -34,9 +34,7 @@
             </div>
 
             <!-- 侧边栏 -->
-            <div class="aside">
-                <!-- 侧边栏组件 -->
-            </div>
+            <FlightsAside/>
         </el-row>
     </section>
 </template>
@@ -46,6 +44,7 @@
 import FlightsListHead from "@/components/air/flightsListHead"
 import FlightsItem from "@/components/air/flightsItem"
 import FlightsFilters from '@/components/air/flightsFilters'
+import FlightsAside from '@/components/air/flightsAside'
 export default {
     data(){
         return {
@@ -88,25 +87,55 @@ export default {
     components: {
         FlightsListHead,
         FlightsItem,
-        FlightsFilters
+        FlightsFilters,
+        FlightsAside
+    },
+    // watch可以监听实例下任何属性的变化
+    watch: {
+        $route(){
+            // 每次url变化时候把pageIndex初始化为1
+            this.pageIndex = 1;
+            // 请求机票列表数据
+            this.getList();
+        }
     },
     mounted(){
-      this.$axios({
-        url:'/airs',
-        //从http地址上拿那个五个参数:城市x2、城市代码x2、时间
-        params:this.$route.query
-      }).then(res=>{
-        // 将返回数据赋值给flightsDdta
-        this.flightsData=res.data;
-         //备份数据，使用{...}方法展开对象，从而得到新的对象才不与上面的flightsData冲突
-         //每次备份都会从新在这里拿数据
-         this.cacheFlightsData={...res.data}
+        //-----------将下面函数进行封装-------在methods:
+    //   this.$axios({
+    //     url:'/airs',
+    //     //从http地址上拿那个五个参数:城市x2、城市代码x2、时间
+    //     params:this.$route.query
+    //   }).then(res=>{
+    //     // 将返回数据赋值给flightsDdta
+    //     this.flightsData=res.data;
+    //      //备份数据，使用{...}方法展开对象，从而得到新的对象才不与上面的flightsData冲突
+    //      //每次备份都会从新在这里拿数据
+    //      this.cacheFlightsData={...res.data}
         
-        //修改总条数
-        this.total = this.flightsData.total;             
-      })
+    //     //修改总条数
+    //     this.total = this.flightsData.total;             
+    //   })
+
+    //调用封装函数getList()
+      this.getList();
     }, 
     methods: {
+         // 请求机票列表接口下面为封装好的函数
+        getList(){
+            // 请求机票列表数据
+            this.$axios({
+                url: "/airs",
+                params: this.$route.query
+            }).then(res => {
+                // 总数据
+                this.flightsData = res.data;
+                // 备份一下数据, 注意res.data需要拷贝一份出来
+                this.cacheFlightsData = {...res.data};
+                
+                // 修改总条数
+                this.total = this.flightsData.total;  
+            })
+        },
      // 切换条数时候触发的事件
      handleSizeChange(index){
          this.pageSize = index;
