@@ -298,6 +298,9 @@ querySearch(value){
         this.$message.error('请选择时间')
         return;
       }
+      
+      //把this.form保存到/air.js的state中
+    this.$store.commit('air/setHistory',this.form)
 
       //跳转到air/flights，保证该页面url的有5个参数
       this.$router.push({
