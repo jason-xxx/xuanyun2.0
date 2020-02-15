@@ -62,11 +62,12 @@
             <div class="contact">
                 <el-form label-width="60px">
                     <el-form-item label="姓名">
-                        <el-input></el-input>
+                        <el-input v-model="form.contactName"></el-input>
                     </el-form-item>
 
                     <el-form-item label="手机">
-                        <el-input placeholder="请输入内容">
+                        <el-input placeholder="请输入内容"
+                        v-model="form.contactPhone">
                             <template slot="append">
                             <el-button @click="handleSendCaptcha">发送验证码</el-button>
                             </template>
@@ -74,7 +75,7 @@
                     </el-form-item>
 
                     <el-form-item label="验证码">
-                        <el-input></el-input>
+                        <el-input v-model="form.captcha"></el-input>
                     </el-form-item>
                 </el-form>   
                 <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
@@ -98,6 +99,7 @@ export default {
             insurances:[],//保险id(保险需后台获取)
             contactName:'',//联系人名字
             contactPhone:'',//联系人电话
+            captcha:'',//文档中缺少属性（文档写错了）
             invoice:false,//因为此案例不需要发票，直接false
             seat_xid:this.$route.query.seat_xid,//直接在http里拿，因为上面有挂载
             air:this.$route.query.id//同理，直接在http里拿，因为上面有挂载
@@ -154,7 +156,17 @@ export default {
         
         // 发送手机验证码
         handleSendCaptcha(){
-            
+            if(!this.form.contactPhone){
+                this.$message.error('手机号码不能为空')
+                return;
+            }
+            //调用store/user.js中发送验证码方法
+            this.$store.dispatch(
+                'user/sendCaptcha',
+                this.form.contactPhone
+            ).then(res=>{
+            this.$message.success('验证发送成功：000000')
+        })
         },
         // 提交订单
         handleSubmit(){
