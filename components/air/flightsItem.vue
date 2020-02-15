@@ -48,7 +48,9 @@
                         <el-col :span="3" class="choose-button">
                             <el-button 
                             type="warning" 
-                            size="mini">
+                            size="mini"
+                            @click="handleToOrder(item)">
+                            <!--这个点击函数的item是上面循环的item值-->
                             选定
                             </el-button>
                             <p>剩余：{{item.discount}}</p>
@@ -97,6 +99,19 @@ export default {
             //分钟
             const min=dis%60;
             return `${hours}小时${min}分`
+        }
+    },
+    methods:{
+        //点击选定按钮跳转到订购单页
+        handleToOrder(item){
+            //后台需要：航班id，座位id
+            this.$router.push({
+                path:'/air/order',
+                quer:{
+                    id:this.data.id,
+                    seat_xid:item.seat_xid
+                }
+            })
         }
     }
 }
