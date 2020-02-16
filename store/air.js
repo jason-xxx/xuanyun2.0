@@ -7,7 +7,9 @@ export const state=()=>{
         orderDetail:{
             //避免模板报错
             seat_infos:{}
-        }
+        },
+        //总价格（因为数据需在orderform获取，所有要存到store里）
+        allPrice:0
     }
 }
 
@@ -23,5 +25,9 @@ export const mutations={
     //接收并把传入的表单数据存到orderDetail
     setOrderDetail(state,data){
         state.orderDetail=data;
+    },
+    //保存总价格
+    setAllPrice(state,data){
+        state.allPrice=data;
     }
 }

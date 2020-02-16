@@ -81,6 +81,8 @@
                 <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
             </div>
         </div>
+        <!-- 需要渲染allPrice（）函数才能执行 -->
+        <span>{{allPrice}}</span>
     </div>
 </template>
 
@@ -107,6 +109,35 @@ export default {
           //当前的机票详情信息,已关联到axios的数据
           infoData:{}
         }
+    },
+    //监听多个
+    computed:{
+        //总价格，展示在侧边栏组件
+        allPrice(){
+            //先判断infoData是否有值，否则会报错因为请求延时
+            if(!this.infoData.seat_infos){
+                return;
+            }
+        //先定义一个变量，然后在后面累加
+          let price=0;
+        //   机票单价：
+        price+=this.infoData.seat_infos.org_settle_price;
+        //基础燃油费
+        price+=this.infoData.airport_tax_audlet;
+        //保险
+        this.infoData.insurances.forEach(v=>{
+            //如果保险id数组中有保险id就需加上保险费
+            if(this.form.insurances.indexOf(v.id) > -1){
+                price+=v.price;
+            }
+        });
+        //添加人数时
+        price*=this.form.users.length;
+        //把总价保存到store中
+        this.$store.commit('air/setAllPrice',price)
+        return '';
+        }
+
     },
     mounted(){
         //请求机票详情信息（里面包含保险和右侧栏需要的信息）
