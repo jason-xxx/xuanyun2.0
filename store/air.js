@@ -9,6 +9,9 @@ export const state=()=>{
 export const mutations={
     //接收并把传入的表单数据存到history
     setHistory(state,data){
-        state.history.push(data)
+        //使用unshift方法将最新的搜索内容展示在头部
+        state.history.unshift(data)
+        //并通过截取数组长度控制搜索历史在5
+        state.history.length=5;
     }
 }
