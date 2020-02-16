@@ -82,7 +82,11 @@ export default {
                 //登录成功提示
                 this.$message.success('登录成功！！！');
                 //跳转首页
-                this.$router.push('/')
+                // this.$router.push('/')
+                //使用push，路由会多存一条数据，使用replace则会代替当前路由
+                //如果判断this.route.query.returnUrl有值返回之前页面，没有就返回首页
+                this.$router.replace(this.$route.query.returnUrl || '/')
+
                 })
               }
           })

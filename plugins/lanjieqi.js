@@ -22,9 +22,11 @@ export default (data)=>{
         //当请求的token有问题时：401-token错误或过期  403-接口没有传token
         if(statusCode===401||statusCode===403){
             //使用data下面的redirect跳转到登录页
+            Message.error('用户未登录，请登录后再进行相关操作')
             data.redirect(200,'/user/login',{
                 // 将http.../user/login后面的参数加上
-                retuenUrl:data.route.fullPath
+                //（作用就是登录后跳转回原来所在的页面）
+                returnUrl:data.route.fullPath
             })
         }
     })
