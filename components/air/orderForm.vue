@@ -170,14 +170,16 @@ export default {
         },
         // 提交订单
         handleSubmit(){
+            //表单的自定义验证
            const rules = {
                 users: {
                     errMessage: "乘机人信息不能为空",
                     // 校验的函数,该函数返回是true的证明验证通过，如果是false就验证失败
                     validator: () => {
                         let valid = true;
+                        //使用formEach循环users这个数组，拿到users和id继续非空判断
                         this.form.users.forEach(v => {
-                            // 只要有一个属性的值是空的话表单没通过
+                            // 只要users和id有一个属性的值是空的话表单没通过，就弹出错误提示
                             if(!v.username || !v.id){
                                 valid = false;
                             }
@@ -189,6 +191,7 @@ export default {
                 contactName: {
                     errMessage: "联系人不能为空",
                     validator: () => {
+                    //!!是判断字符串的布尔类型，内容为空就false，不为空则true
                         return !!this.form.contactName;
                     }
                 },
@@ -196,6 +199,7 @@ export default {
                 contactPhone: {
                     errMessage: "手机号码不能为空",
                     validator: () => {
+                    //!!是判断字符串的布尔类型方法，内容为空false，不为空则true
                         return !!this.form.contactPhone;
                     }
                 },
@@ -203,19 +207,21 @@ export default {
                 captcha: {
                     errMessage: "验证码不能为空",
                     validator: () => {
+                    //!!是判断字符串的布尔类型方法，内容为空false，不为空则true
                         return !!this.form.captcha;
                     }
                 }
             }
-            // 循环rules对象调用validator方法实现校验
+            // 循环上面整个rules对象调用validator方法实现校验
             // console.log(Object.keys(rules))
             // 先假设所有校验都是通过的
             let  valid = true;
+            // Object.keys方法可以返回以对象的'键'组成的数组
             Object.keys(rules).forEach(v => {
                 // 如果已经有字段校验不通过，就不用继续判断了
                 if(!valid) return;
                 const item = rules[v];
-                // 执行每个字段下的validator函数
+                // 执行每个字段下的validator函数，即判断非空
                 valid = item.validator();
                 
                 if(!valid){
@@ -226,6 +232,20 @@ export default {
             if(!valid) return;
             // 调用提交订单的接口
             // console.log(this.form.insurances)
+             // 调用提交订单的接口
+           this.$axios({
+                url: "/airorders",
+                method: "POST",
+                data: this.form,
+                headers: {
+                    // 必须要做token前面加上`Bearer `字符串，后面有一个空格的
+                    //黑马头条token前没加`Bearer `是因为在后台加了，是一种固定写法
+                    Authorization: `Bearer ` + this.$store.state.user.userInfo.token
+                }
+            }).then(res => {
+                //根据res的返回值判断订单是否提交成功
+                console.log(res);
+            })
             
         }
     }
