@@ -18,6 +18,15 @@ export default (data)=>{
             //使用element-ui组件显示错误
             Message.error(message)
         }
+
+        //当请求的token有问题时：401-token错误或过期  403-接口没有传token
+        if(statusCode===401||statusCode===403){
+            //使用data下面的redirect跳转到登录页
+            data.redirect(200,'/user/login',{
+                // 将http.../user/login后面的参数加上
+                retuenUrl:data.route.fullPath
+            })
+        }
     })
     
 }
