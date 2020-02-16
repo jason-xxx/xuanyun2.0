@@ -2,7 +2,12 @@
 export const state=()=>{
     return {
         //历史查询的数组
-        history:[]
+        history:[],
+        //存入订单的详情信息
+        orderDetail:{
+            //避免模板报错
+            seat_infos:{}
+        }
     }
 }
 
@@ -13,5 +18,10 @@ export const mutations={
         state.history.unshift(data)
         //并通过截取数组长度控制搜索历史在5
         state.history.length=5;
+    },
+
+    //接收并把传入的表单数据存到orderDetail
+    setOrderDetail(state,data){
+        state.orderDetail=data;
     }
 }

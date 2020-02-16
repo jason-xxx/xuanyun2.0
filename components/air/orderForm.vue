@@ -122,7 +122,9 @@ export default {
             //赋值给infoData（当前的机票详情信息）
            this.infoData=res.data
         // console.log(res.data);
-           
+
+        //将infoData保存到store中
+        this.$store.commit('air/setOrderDetail',this.infoData)        
         })
     },
     methods: {
@@ -244,7 +246,9 @@ export default {
                 }
             }).then(res => {
                 //根据res的返回值判断订单是否提交成功
-                console.log(res);
+                // console.log(res);
+                // 添加提交成功提示
+                this.$message.success('订单提交成功')
             })
             
         }
