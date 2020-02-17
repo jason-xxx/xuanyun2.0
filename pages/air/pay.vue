@@ -2,7 +2,7 @@
     <div class="container">
         <div class="main">
             <div class="pay-title">
-                支付总金额 <span class="pay-price">￥ 1000</span>
+                支付总金额 <span class="pay-price">{{orderDetail.price}}</span>
             </div>
             <div class="pay-main">
                 <h4>微信支付</h4>
@@ -26,8 +26,17 @@
 </template>
 
 <script>
+// 导入生成二维码的插件
+import QRCode from 'qrcode'
 export default {
+    data(){
+        return{
+            //订单详情
+            orderDetail:{}
+        }
+    },
     mounted(){
+        //页面刷新后无法获取本地的token会报403的错误，需要使用定时器等待一下再执行
         setTimeout(() => {
             // 调用订单详情api接口
             this.$axios({
@@ -38,7 +47,17 @@ export default {
                     Authorization: `Bearer ` + this.$store.state.user.userInfo.token
                 }
             }).then(res => {
-                console.log(res)
+                // 将获取到的订单详情页赋值给orderDetail
+                this.orderDetail=res.data;
+
+                //获取二维码链接
+                const {code_url}=this.orderDetail.payInfo;
+                //使用DOM方法获取id
+                const canvas=document.getElementById('qrcode-stage');
+                // 生成二维码，渲染到id=qrcode-srage的标签上
+                QRCode.toCanvas(canvas,code_url,{
+                    width:200
+                })
             })
         }, 0)
     }
