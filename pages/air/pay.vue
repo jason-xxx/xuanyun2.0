@@ -2,7 +2,7 @@
     <div class="container">
         <div class="main">
             <div class="pay-title">
-                支付总金额 <span class="pay-price">{{orderDetail.price}}</span>
+                支付总金额 <span class="pay-price">￥{{orderDetail.price}}</span>
             </div>
             <div class="pay-main">
                 <h4>微信支付</h4>
@@ -24,15 +24,18 @@
         </div>
     </div>
 </template>
-
 <script>
 // 导入生成二维码的插件
+//可以去GitHub搜索qrcode=>（这里使用的是星星第二多的文档）
 import QRCode from 'qrcode'
 export default {
     data(){
         return{
             //订单详情
-            orderDetail:{}
+            orderDetail:{},
+            // 定时器
+            timer: ""
+
         }
     },
     mounted(){
@@ -58,8 +61,48 @@ export default {
                 QRCode.toCanvas(canvas,code_url,{
                     width:200
                 })
+                //查询支付状态（3s查一次）
+                this.timer=setInterval(()=>{
+                    //调用methods:的isPay()
+                    this.isPay();
+                },3000)
             })
         }, 0)
+    },
+    //组件销毁时触发（让查询支付状态停止）
+    destroyed(){
+        // 停止定时器
+        clearInterval(this.timer);
+    },
+    methods:{
+        //是否支付成功函数
+        isPay(){
+            const {id,price,orderNo}=this.orderDetail
+            this.$axios({
+                url:'/airorders/checkpay',
+                method:'POST',
+                data:{
+                    id,
+                    nonce_str:price,
+                    out_trade_no:orderNo
+                },
+                headers:{
+                    Authorization: `Bearer ` + this.$store.state.user.userInfo.token
+                    }
+            }).then(res=>{
+                //如果返回的是statusTxt='支付成功'就弹出提示，并停止定时器
+                if(res.data.statusTxt==='支付完成'){
+                    //停止定时器
+                    clearInterval(this.timer);
+                    //支付成功弹窗（element提供）
+                    this.$alert('支付成功，微信收款100万元','提示',{
+                        confirmButtonText:'确定',
+                        type:'success'
+                    })
+                }
+            })
+
+        }
     }
 }
 </script>
