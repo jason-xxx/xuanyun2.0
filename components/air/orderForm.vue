@@ -114,7 +114,7 @@ export default {
     computed:{
         //总价格，展示在侧边栏组件
         allPrice(){
-            //先判断infoData是否有值，否则会报错因为请求延时
+            //先判断infoData是否有数据（即是否请求成功），否则会报错，因为请求延时
             if(!this.infoData.seat_infos){
                 return;
             }
@@ -280,6 +280,16 @@ export default {
                 // console.log(res);
                 // 添加提交成功提示
                 this.$message.success('订单提交成功')
+
+                //跳转付款页面(通过setTimeout延时跳转，加强用户体验)
+                setTimeout(()=>{
+                this.$router.push({
+                    path:'/air/pay',
+                    query:{
+                        id:res.data.data.id//订单id
+                    }
+                })
+                },2000)
             })
             
         }
